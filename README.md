@@ -66,6 +66,28 @@ Go package that converts XML to JSON
   }
 ```
 
+### XML Attriutes mapping
+
+By default all attributes are being decorated on decoding using `"-"` prefix. Thus this example XML
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<hello foo="bar">
+  <whole>world</whole>
+</hello>
+```
+will be transformed to
+```json
+{ "hello": { "-foo": "bar", "whole": "world" } }
+```
+To override this behaviour function
+```go
+json, err := xml2json.ConvertWithAttrPrefix(xml, "")
+```
+can be used instead.
+```json
+{ "hello": { "foo": "bar", "whole": "world" } }
+```
+
 ### Disclaimer
 This project has been hacked in a few hours and is definitely not production ready.
 

@@ -5,14 +5,11 @@ import (
 	"io"
 )
 
-const (
-	attrPrefix = "-"
-)
-
 // A Decoder reads and decodes XML objects from an input stream.
 type Decoder struct {
-	r   io.Reader
-	err error
+	r          io.Reader
+	err        error
+	attrPrefix string
 }
 
 type element struct {
@@ -23,7 +20,12 @@ type element struct {
 
 // NewDecoder returns a new decoder that reads from r.
 func NewDecoder(r io.Reader) *Decoder {
-	return &Decoder{r: r}
+	return &Decoder{r: r, attrPrefix: "-"}
+}
+
+// NewDecoder returns a new decoder that reads from r with custom attribute prefiх.
+func NewDecoderWithAttrPrefix(r io.Reader, attrPrefix string) *Decoder {
+	return &Decoder{r: r, attrPrefix: attrPrefix}
 }
 
 // Decode reads the next JSON-encoded value from its
@@ -54,7 +56,7 @@ func (dec *Decoder) Decode(root *Node) error {
 
 			// Extract attributes as children
 			for _, a := range se.Attr {
-				elem.n.AddChild(attrPrefix+a.Name.Local, &Node{Data: a.Value})
+				elem.n.AddChild(dec.attrPrefix+a.Name.Local, &Node{Data: a.Value})
 			}
 		case xml.CharData:
 			// Extract XML data (if any)

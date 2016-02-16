@@ -66,7 +66,7 @@ Go package that converts XML to JSON
   }
 ```
 
-### XML Attriutes mapping
+### XML Attributes mapping
 
 By default all attributes are being decorated on decoding using `"-"` prefix. Thus this example XML
 ```xml
